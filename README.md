@@ -1,0 +1,1 @@
+# mehmet_endustriyeltakip
