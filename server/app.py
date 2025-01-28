@@ -8,7 +8,7 @@ from config import Config
 
 
 from flask import Flask
-from .config import Config
+
 from .extensions import init_extensions, db, api
 from .models import *
 from .routes import register_routes
