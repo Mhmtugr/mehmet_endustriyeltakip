@@ -2,12 +2,11 @@ import sys
 import os
 
 from config import Config
-
 from flask import Flask
 
-from server.extensions import init_extensions, db, api
-from server.models import *
-from server.routes import register_routes
+from extensions import init_extensions, db, api
+from models import *
+from routes import register_routes
 
 def create_app():
     app = Flask(__name__)
