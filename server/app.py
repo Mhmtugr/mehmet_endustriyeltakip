@@ -1,3 +1,12 @@
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+from config import Config
+
+
+
 from flask import Flask
 from .config import Config
 from .extensions import init_extensions, db, api
