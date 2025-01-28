@@ -1,11 +1,9 @@
 import axios from 'axios';
 
-// Buraya, backend'in tam URL'sini yazacaksın. Lokal test için genelde:
+// Backend'in tam URL'sini buraya yaz. Lokal geliştirme için:
 // const BASE_URL = "http://localhost:5000";
-// Deploy ettiğinde PythonAnywhere adresi gibi bir şey olabilir:
-const BASE_URL = "https://username.pythonanywhere.com";
 
-// Gerçek kullanıcının PythonAnywhere kullanıcı adını girin
+// Deploy ettiğinde PythonAnywhere veya başka bir sunucu adresini kullan:
 const BASE_URL = "https://Mhmtugr.pythonanywhere.com";
 
 const api = axios.create({
@@ -13,3 +11,4 @@ const api = axios.create({
 });
 
 export default api;
+
