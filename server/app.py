@@ -1,12 +1,15 @@
 import sys
 import os
 
-from server.config import Config  # <-- Doğru import yolu!
+# Modül yollarını ayarla
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+
+from config import Config
 from flask import Flask
 
-from server.extensions import init_extensions, db, api  # <-- Doğru import yolu!
-from server.models import *  # <-- Doğru import yolu!
-from server.routes import register_routes  # <-- Doğru import yolu!
+from extensions import init_extensions, db, api
+from models import *
+from routes import register_routes
 
 def create_app():
     app = Flask(__name__)
