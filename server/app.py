@@ -2,12 +2,13 @@ import os
 import sys
 from flask import Flask
 from config import Config
+
+# Sistem yoluna "server" klasörünü ekleyelim
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+
 from server.extensions import db, init_extensions
 from server.models import *
 from server.routes import register_routes
-
-# PythonAnywhere için modül yollarını ekleyelim
-sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 def create_app():
     app = Flask(__name__)
