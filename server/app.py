@@ -1,7 +1,7 @@
 import os
 import sys
 from flask import Flask
-from config import Config
+from server.config import Config
 
 # Sistem yoluna "server" klasörünü ekleyelim
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
