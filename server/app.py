@@ -1,11 +1,6 @@
 import os
-import sys
 from flask import Flask
 from server.config import Config
-
-# Sistem yoluna "server" klasörünü ekleyelim
-sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
-
 from server.extensions import db, init_extensions
 from server.models import *
 from server.routes import register_routes
