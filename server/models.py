@@ -1,5 +1,5 @@
 from datetime import datetime
-from extensions import db
+from server.extensions import db
 
 class SalesOrder(db.Model):
     __tablename__ = 'sales_orders'
