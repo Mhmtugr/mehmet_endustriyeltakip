@@ -1,5 +1,5 @@
 from datetime import datetime
-from server.extensions import db  # MUTLAK IMPORT
+from server.extensions import db  # MUTLAK IMPORT (ABSOLUTE IMPORT)
 
 class SalesOrder(db.Model):
     __tablename__ = 'sales_orders'
