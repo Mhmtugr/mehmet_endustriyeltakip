@@ -3,7 +3,7 @@ import sys
 from flask import Flask
 from config import Config
 from extensions import db, init_extensions
-from models import *
+from server.models import *
 from routes import register_routes
 
 # PythonAnywhere için modül yollarını ekleyelim
