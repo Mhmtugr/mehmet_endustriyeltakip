@@ -1,4 +1,5 @@
 import os
+from server.config import Config
 
 class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///mehmetendustri.db")
