@@ -2,9 +2,9 @@ import os
 import sys
 from flask import Flask
 from config import Config
-from extensions import db, init_extensions
+from server.extensions import db, init_extensions
 from server.models import *
-from routes import register_routes
+from server.routes import register_routes
 
 # PythonAnywhere için modül yollarını ekleyelim
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
