@@ -1,2 +1,2 @@
 from server.config import Config
-from app import app
+from server.app import app
