@@ -8,9 +8,13 @@ class CreateSalesOrder(Resource):
     def post(self):
         data = request.get_json()
 
-        if not data:
-            return {"error": "Eksik veri"}, 400
+        # Eksik veri kontrolü
+        required_fields = ["customer_name", "product_type"]
+        for field in required_fields:
+            if not data.get(field):
+                return {"error": f"{field} zorunludur"}, 400
 
+        # Yeni sipariş oluştur
         new_order = SalesOrder(
             customer_name=data.get("customer_name"),
             product_type=data.get("product_type"),
@@ -25,13 +29,13 @@ class CreateSalesOrder(Resource):
         db.session.add(new_order)
         db.session.commit()
 
-        # AI tahmini (opsiyonel)
+        # AI tahmini (Opsiyonel)
         complexity_factor = 1.0
         if "ABB" in (data.get("koruma_rolesi") or ""):
             complexity_factor += 0.1
 
-        mat_map = {"CB": 15, "LB": 10, "FL": 12, "RMU": 20}
-        total_material_count = mat_map.get(data.get("product_type"), 10)
+        material_map = {"CB": 15, "LB": 10, "FL": 12, "RMU": 20}
+        total_material_count = material_map.get(data.get("product_type"), 10)
 
         predicted_days = AIServices.predict_delivery_days(
             data.get("product_type"),
@@ -53,5 +57,29 @@ class SalesOrderDetail(Resource):
     def get(self, order_id):
         order = SalesOrder.query.get(order_id)
         if not order:
-            return {"error": "Order not found"}, 404
+            return {"error": "Sipariş bulunamadı"}, 404
         return jsonify(order.to_dict())
+
+class UpdateSalesOrder(Resource):
+    def put(self, order_id):
+        data = request.get_json()
+        order = SalesOrder.query.get(order_id)
+
+        if not order:
+            return {"error": "Sipariş bulunamadı"}, 404
+
+        for key, value in data.items():
+            setattr(order, key, value)
+
+        db.session.commit()
+        return jsonify({"message": "Sipariş güncellendi.", "order_id": order.id})
+
+class DeleteSalesOrder(Resource):
+    def delete(self, order_id):
+        order = SalesOrder.query.get(order_id)
+        if not order:
+            return {"error": "Sipariş bulunamadı"}, 404
+
+        db.session.delete(order)
+        db.session.commit()
+        return jsonify({"message": "Sipariş silindi"})
