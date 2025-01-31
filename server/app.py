@@ -1,17 +1,22 @@
 import os
+import sys
 from flask import Flask
 from server.config import Config
 from server.extensions import db, init_extensions
-from server.models import *
+from server.models import *  # Tüm Modeller İçin
 from server.routes import register_routes
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+    
+    # Extensions'ları başlat
+    init_extensions(app)
 
-    init_extensions(app)  # db, cors init
-    register_routes(app)  # blueprint or restful routes
+    # Rotaları ekle
+    register_routes(app)
 
+    # Veritabanı tablolarını oluştur
     with app.app_context():
         db.create_all()
 
@@ -19,6 +24,6 @@ def create_app():
 
 app = create_app()
 
-# PythonAnywhere WSGI
+# PythonAnywhere için özel çalıştırma komutu
 if __name__ != "__main__":
-    application = app
+    application = app  # WSGI için application nesnesini tanımla
