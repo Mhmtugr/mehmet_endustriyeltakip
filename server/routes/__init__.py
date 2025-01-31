@@ -5,6 +5,8 @@ from .ai_routes import TrainModelResource, PredictDeliveryResource
 from .reports_routes import ProductionDashboard
 
 def register_routes(api):
+    """ Flask RESTful API için tüm endpointleri ekler """
+
     # SALES
     api.add_resource(CreateSalesOrder, "/orders")
     api.add_resource(ListSalesOrders, "/orders/list")
