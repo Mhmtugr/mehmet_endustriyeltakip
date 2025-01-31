@@ -9,6 +9,8 @@ from server.routes import register_routes
 
 def create_app():
     app = Flask(__name__)
+    api = Api(app)
+    register_routes(api)
     app.config.from_object(Config)
     
     # Extensions'ları başlat
