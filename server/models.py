@@ -32,7 +32,6 @@ class SalesOrder(db.Model):
             "created_at": self.created_at.isoformat()
         }
 
-# Eksik Modeli Ekleyelim (AI Model için)
 class AIModelTrainingData(db.Model):
     __tablename__ = 'ai_model_training_data'
     id = db.Column(db.Integer, primary_key=True)
@@ -46,4 +45,22 @@ class AIModelTrainingData(db.Model):
             "model_name": self.model_name,
             "training_data": self.training_data,
             "created_at": self.created_at.isoformat()
+        }
+
+class ProductionTask(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    task_name = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    status = db.Column(db.String(50), default="Pending")  # "Pending", "In Progress", "Completed"
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "task_name": self.task_name,
+            "description": self.description,
+            "status": self.status,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at,
         }
