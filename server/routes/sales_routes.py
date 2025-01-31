@@ -1,12 +1,16 @@
 from flask import request, jsonify
 from flask_restful import Resource
-from ..extensions import db
-from ..models import SalesOrder
-from ..services.ai_service import AIServices
+from server.extensions import db
+from server.models import SalesOrder
+from server.services.ai_service import AIServices
 
 class CreateSalesOrder(Resource):
     def post(self):
         data = request.get_json()
+
+        if not data:
+            return {"error": "Eksik veri"}, 400
+
         new_order = SalesOrder(
             customer_name=data.get("customer_name"),
             product_type=data.get("product_type"),
@@ -21,7 +25,7 @@ class CreateSalesOrder(Resource):
         db.session.add(new_order)
         db.session.commit()
 
-        # Basit AI tahmini (opsiyonel)
+        # AI tahmini (opsiyonel)
         complexity_factor = 1.0
         if "ABB" in (data.get("koruma_rolesi") or ""):
             complexity_factor += 0.1
@@ -38,7 +42,7 @@ class CreateSalesOrder(Resource):
             new_order.estimated_delivery_days = predicted_days
             db.session.commit()
 
-        return jsonify({"message": "Sales order created", "order_id": new_order.id})
+        return jsonify({"message": "Sipariş başarıyla oluşturuldu.", "order_id": new_order.id}), 201
 
 class ListSalesOrders(Resource):
     def get(self):
@@ -50,4 +54,4 @@ class SalesOrderDetail(Resource):
         order = SalesOrder.query.get(order_id)
         if not order:
             return {"error": "Order not found"}, 404
-        return order.to_dict()
+        return jsonify(order.to_dict())
