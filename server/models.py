@@ -1,3 +1,6 @@
+from datetime import datetime
+from server.extensions import db  # 🚀 Eksik import EKLENDİ! 🚀
+
 class SalesOrder(db.Model):
     __tablename__ = 'sales_orders'
     id = db.Column(db.Integer, primary_key=True)
