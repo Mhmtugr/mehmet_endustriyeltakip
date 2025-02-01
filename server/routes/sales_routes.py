@@ -1,3 +1,4 @@
+# server/routes/sales_routes.py
 from flask import request, jsonify
 from flask_restful import Resource, fields, marshal
 from server.extensions import db
@@ -15,20 +16,19 @@ order_fields = {
     "akim_trafo": fields.String,
     "gerilim_trafo": fields.String,
     "status": fields.String,
-    "estimated_delivery_days": fields.Integer
+    "estimated_delivery_days": fields.Integer,
+    "created_at": fields.String
 }
 
 class CreateSalesOrder(Resource):
     def post(self):
         data = request.get_json()
 
-        # Eksik veri kontrolü
         required_fields = ["customer_name", "product_type"]
         for field in required_fields:
             if not data.get(field):
                 return {"error": f"{field} zorunludur"}, 400
 
-        # Yeni sipariş oluştur
         new_order = SalesOrder(
             customer_name=data.get("customer_name"),
             product_type=data.get("product_type"),
@@ -78,13 +78,10 @@ class UpdateSalesOrder(Resource):
     def put(self, order_id):
         data = request.get_json()
         order = SalesOrder.query.get(order_id)
-
         if not order:
             return {"error": "Sipariş bulunamadı"}, 404
-
         for key, value in data.items():
             setattr(order, key, value)
-
         db.session.commit()
         return jsonify({"message": "Sipariş güncellendi.", "order_id": order.id})
 
@@ -93,7 +90,6 @@ class DeleteSalesOrder(Resource):
         order = SalesOrder.query.get(order_id)
         if not order:
             return {"error": "Sipariş bulunamadı"}, 404
-
         db.session.delete(order)
         db.session.commit()
         return jsonify({"message": "Sipariş silindi"})
