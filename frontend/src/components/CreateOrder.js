@@ -1,3 +1,4 @@
+// frontend/src/components/CreateOrder.js
 import React, { useState } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
@@ -23,7 +24,7 @@ function CreateOrder() {
     e.preventDefault();
     api.post("/orders", formData)
       .then(res => {
-        alert('Sipariş başarıyla eklendi!');
+        alert('Sipariş eklendi!');
         navigate("/orders");
       })
       .catch(err => {
@@ -33,60 +34,47 @@ function CreateOrder() {
   };
 
   return (
-    <div style={{
-      maxWidth: "600px",
-      margin: "auto",
-      padding: "20px",
-      border: "1px solid #ccc",
-      borderRadius: "10px",
-      backgroundColor: "#f9f9f9"
-    }}>
-      <h2 style={{ textAlign: "center", color: "#333" }}>Yeni Sipariş Ekle</h2>
+    <div>
+      <h2>Yeni Sipariş Ekle</h2>
       <form onSubmit={handleSubmit}>
-        <label>Müşteri Adı:</label>
-        <input
-          name="customer_name"
-          value={formData.customer_name}
-          onChange={handleChange}
-          required
-        />
-
-        <label>Ürün Tipi:</label>
-        <select name="product_type" value={formData.product_type} onChange={handleChange}>
-          <option value="CB">CB</option>
-          <option value="LB">LB</option>
-          <option value="FL">FL</option>
-          <option value="RMU">RMU</option>
-        </select>
-
-        <label>Koruma Rölesi:</label>
-        <input name="koruma_rolesi" value={formData.koruma_rolesi} onChange={handleChange} />
-
-        <label>Çalışma Gerilimi:</label>
-        <input type="number" name="calisma_gerilimi" value={formData.calisma_gerilimi} onChange={handleChange} />
-
-        <label>Nominal Akım:</label>
-        <input type="number" name="nominal_akim" value={formData.nominal_akim} onChange={handleChange} />
-
-        <label>Kontrol Gerilimi:</label>
-        <input type="number" name="kontrol_gerilimi" value={formData.kontrol_gerilimi} onChange={handleChange} />
-
-        <label>Akım Trafo:</label>
-        <input name="akim_trafo" value={formData.akim_trafo} onChange={handleChange} />
-
-        <label>Gerilim Trafo:</label>
-        <input name="gerilim_trafo" value={formData.gerilim_trafo} onChange={handleChange} />
-
-        <button type="submit" style={{
-          width: "100%",
-          padding: "10px",
-          marginTop: "10px",
-          backgroundColor: "#007bff",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer"
-        }}>Kaydet</button>
+        <div>
+          <label>Müşteri Adı:</label>
+          <input name="customer_name" value={formData.customer_name} onChange={handleChange} />
+        </div>
+        <div>
+          <label>Ürün Tipi:</label>
+          <select name="product_type" value={formData.product_type} onChange={handleChange}>
+            <option value="CB">CB</option>
+            <option value="LB">LB</option>
+            <option value="FL">FL</option>
+            <option value="RMU">RMU</option>
+          </select>
+        </div>
+        <div>
+          <label>Koruma Rölesi:</label>
+          <input name="koruma_rolesi" value={formData.koruma_rolesi} onChange={handleChange} />
+        </div>
+        <div>
+          <label>Çalışma Gerilimi:</label>
+          <input type="number" name="calisma_gerilimi" value={formData.calisma_gerilimi} onChange={handleChange} />
+        </div>
+        <div>
+          <label>Nominal Akım:</label>
+          <input type="number" name="nominal_akim" value={formData.nominal_akim} onChange={handleChange} />
+        </div>
+        <div>
+          <label>Kontrol Gerilimi:</label>
+          <input type="number" name="kontrol_gerilimi" value={formData.kontrol_gerilimi} onChange={handleChange} />
+        </div>
+        <div>
+          <label>Akım Trafo:</label>
+          <input name="akim_trafo" value={formData.akim_trafo} onChange={handleChange} />
+        </div>
+        <div>
+          <label>Gerilim Trafo:</label>
+          <input name="gerilim_trafo" value={formData.gerilim_trafo} onChange={handleChange} />
+        </div>
+        <button type="submit">Kaydet</button>
       </form>
     </div>
   );
