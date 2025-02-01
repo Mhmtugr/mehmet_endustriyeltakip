@@ -1,5 +1,4 @@
 # server/app.py
-import os
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_cors import CORS
@@ -10,18 +9,16 @@ from server.routes import register_routes
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-    CORS(app, resources={r"/*": {"origins": "*"}})
-
-    # API Nesnesini Tanımla
-    api = Api(app)
+    CORS(app, resources={r"/*": {"origins": "*"}})  # Tüm istekler için CORS
 
     # Extensions'ları başlat
     init_extensions(app)
 
-    # API rotalarını ekle
+    # API nesnesini tanımla ve endpoint'leri ekle
+    api = Api(app)
     register_routes(api)
 
-    # Basit bir anasayfa rotası ekleyelim:
+    # Root URL için basit bir anasayfa (isteğe bağlı)
     @app.route('/')
     def index():
         return jsonify({"message": "Welcome to the Mehmet Endustriyeltakip API!"})
@@ -34,5 +31,6 @@ def create_app():
 
 app = create_app()
 
+# WSGI sunucuları (Render, PythonAnywhere, vb.) için:
 if __name__ != "__main__":
-    application = app  # WSGI ortamları için
+    application = app
