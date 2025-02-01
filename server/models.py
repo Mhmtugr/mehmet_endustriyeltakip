@@ -1,3 +1,4 @@
+# server/models.py
 from datetime import datetime
 from server.extensions import db
 
@@ -32,26 +33,67 @@ class SalesOrder(db.Model):
             "created_at": self.created_at.isoformat()
         }
 
+class InventoryItem(db.Model):
+    __tablename__ = 'inventory_items'
+    id = db.Column(db.Integer, primary_key=True)
+    material_name = db.Column(db.String(150), unique=True, nullable=False)
+    current_stock = db.Column(db.Integer, default=0)
+    min_stock_level = db.Column(db.Integer, default=0)
+    lead_time_days = db.Column(db.Integer, default=0)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "material_name": self.material_name,
+            "current_stock": self.current_stock,
+            "min_stock_level": self.min_stock_level,
+            "lead_time_days": self.lead_time_days,
+        }
+
+class PurchaseOrder(db.Model):
+    __tablename__ = 'purchase_orders'
+    id = db.Column(db.Integer, primary_key=True)
+    item_id = db.Column(db.Integer, db.ForeignKey('inventory_items.id'))
+    quantity_ordered = db.Column(db.Integer, nullable=False)
+    estimated_arrival_days = db.Column(db.Integer, nullable=True)
+    status = db.Column(db.String(50), default="Open")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "item_id": self.item_id,
+            "quantity_ordered": self.quantity_ordered,
+            "estimated_arrival_days": self.estimated_arrival_days,
+            "status": self.status
+        }
+
+# Uygulamanızın yapay zeka servisi için gerekli veriler;
+# (Eski versiyondaki alanlar; böylece AIServices içindeki kodlarınız çalışmaya devam eder)
 class AIModelTrainingData(db.Model):
     __tablename__ = 'ai_model_training_data'
     id = db.Column(db.Integer, primary_key=True)
-    model_name = db.Column(db.String(100), nullable=False)
-    training_data = db.Column(db.Text, nullable=False)
+    product_type = db.Column(db.String(50), nullable=False)
+    complexity_factor = db.Column(db.Float, nullable=False)
+    total_material_count = db.Column(db.Integer, nullable=False)
+    actual_delivery_days = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
         return {
             "id": self.id,
-            "model_name": self.model_name,
-            "training_data": self.training_data,
+            "product_type": self.product_type,
+            "complexity_factor": self.complexity_factor,
+            "total_material_count": self.total_material_count,
+            "actual_delivery_days": self.actual_delivery_days,
             "created_at": self.created_at.isoformat()
         }
 
 class ProductionTask(db.Model):
+    __tablename__ = 'production_tasks'
     id = db.Column(db.Integer, primary_key=True)
     task_name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=True)
-    status = db.Column(db.String(50), default="Pending")  # "Pending", "In Progress", "Completed"
+    status = db.Column(db.String(50), default="Pending")
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
@@ -61,47 +103,6 @@ class ProductionTask(db.Model):
             "task_name": self.task_name,
             "description": self.description,
             "status": self.status,
-            "created_at": self.created_at,
-            "updated_at": self.updated_at,
-        }
-
-class InventoryItem(db.Model):
-    __tablename__ = 'inventory_items'
-    id = db.Column(db.Integer, primary_key=True)
-    item_name = db.Column(db.String(255), nullable=False)
-    quantity = db.Column(db.Integer, nullable=False, default=0)
-    unit_price = db.Column(db.Float, nullable=False, default=0.0)
-    supplier = db.Column(db.String(255), nullable=True)
-    last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "item_name": self.item_name,
-            "quantity": self.quantity,
-            "unit_price": self.unit_price,
-            "supplier": self.supplier,
-            "last_updated": self.last_updated.isoformat(),
-        }
-
-class PurchaseOrder(db.Model):
-    __tablename__ = 'purchase_orders'
-    id = db.Column(db.Integer, primary_key=True)
-    item_id = db.Column(db.Integer, db.ForeignKey('inventory_items.id'), nullable=False)
-    order_quantity = db.Column(db.Integer, nullable=False)
-    order_date = db.Column(db.DateTime, default=datetime.utcnow)
-    expected_delivery = db.Column(db.DateTime, nullable=True)
-    status = db.Column(db.String(50), default="Pending")  # "Pending", "Completed", "Cancelled"
-
-    item = db.relationship("InventoryItem", backref="purchase_orders")
-
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "item_id": self.item_id,
-            "item_name": self.item.item_name,
-            "order_quantity": self.order_quantity,
-            "order_date": self.order_date.isoformat(),
-            "expected_delivery": self.expected_delivery.isoformat() if self.expected_delivery else None,
-            "status": self.status,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
         }
