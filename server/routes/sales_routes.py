@@ -1,8 +1,22 @@
 from flask import request, jsonify
-from flask_restful import Resource
+from flask_restful import Resource, fields, marshal
 from server.extensions import db
 from server.models import SalesOrder
 from server.services.ai_service import AIServices
+
+order_fields = {
+    "id": fields.Integer,
+    "customer_name": fields.String,
+    "product_type": fields.String,
+    "koruma_rolesi": fields.String,
+    "calisma_gerilimi": fields.Float,
+    "nominal_akim": fields.Float,
+    "kontrol_gerilimi": fields.Float,
+    "akim_trafo": fields.String,
+    "gerilim_trafo": fields.String,
+    "status": fields.String,
+    "estimated_delivery_days": fields.Integer
+}
 
 class CreateSalesOrder(Resource):
     def post(self):
@@ -46,19 +60,19 @@ class CreateSalesOrder(Resource):
             new_order.estimated_delivery_days = predicted_days
             db.session.commit()
 
-        return jsonify({"message": "Sipariş başarıyla oluşturuldu.", "order_id": new_order.id}), 201
+        return marshal(new_order, order_fields), 201
 
 class ListSalesOrders(Resource):
     def get(self):
         orders = SalesOrder.query.all()
-        return jsonify([o.to_dict() for o in orders])
+        return jsonify([marshal(o, order_fields) for o in orders])
 
 class SalesOrderDetail(Resource):
     def get(self, order_id):
         order = SalesOrder.query.get(order_id)
         if not order:
             return {"error": "Sipariş bulunamadı"}, 404
-        return jsonify(order.to_dict())
+        return marshal(order, order_fields)
 
 class UpdateSalesOrder(Resource):
     def put(self, order_id):
