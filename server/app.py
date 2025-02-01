@@ -1,6 +1,6 @@
 # server/app.py
 import os
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restful import Api
 from flask_cors import CORS
 from server.config import Config
@@ -20,6 +20,11 @@ def create_app():
 
     # API rotalarını ekle
     register_routes(api)
+
+    # Basit bir anasayfa rotası ekleyelim:
+    @app.route('/')
+    def index():
+        return jsonify({"message": "Welcome to the Mehmet Endustriyeltakip API!"})
 
     # Veritabanı tablolarını oluştur
     with app.app_context():
