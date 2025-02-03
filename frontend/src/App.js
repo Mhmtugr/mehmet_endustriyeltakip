@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Layout from './components/Layout';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import OrdersList from './components/OrdersList';
@@ -15,9 +16,18 @@ function App() {
       </nav>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/orders" element={<OrdersList />} />
-        <Route path="/new-order" element={<CreateOrder />} />
+        <Route
+          path="/dashboard"
+          element={<Layout><Dashboard /></Layout>}
+        />
+        <Route
+          path="/orders"
+          element={<Layout><OrdersList /></Layout>}
+        />
+        <Route
+          path="/new-order"
+          element={<Layout><CreateOrder /></Layout>}
+        />
         <Route path="/welcome" element={<h1>Hoş Geldin!</h1>} />
         {/* Diğer modüller için ek rotalar */}
       </Routes>
