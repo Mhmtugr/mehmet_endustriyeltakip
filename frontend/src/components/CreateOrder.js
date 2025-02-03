@@ -1,7 +1,9 @@
-// frontend/src/components/CreateOrder.js
 import React, { useState } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import { TextField, MenuItem, Button, Container, Card, CardContent, Typography, Box } from '@mui/material';
+
+const productOptions = ["CB", "LB", "FL", "RMU"];
 
 function CreateOrder() {
   const navigate = useNavigate();
@@ -23,60 +25,94 @@ function CreateOrder() {
   const handleSubmit = (e) => {
     e.preventDefault();
     api.post("/orders", formData)
-      .then(res => {
-        alert('Sipariş eklendi!');
+      .then(() => {
+        alert('Sipariş başarıyla eklendi!');
         navigate("/orders");
       })
-      .catch(err => {
-        console.error(err);
-        alert('Sipariş eklenirken hata oluştu');
+      .catch(() => {
+        alert('Sipariş eklenirken hata oluştu.');
       });
   };
 
   return (
-    <div>
-      <h2>Yeni Sipariş Ekle</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Müşteri Adı:</label>
-          <input name="customer_name" value={formData.customer_name} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Ürün Tipi:</label>
-          <select name="product_type" value={formData.product_type} onChange={handleChange}>
-            <option value="CB">CB</option>
-            <option value="LB">LB</option>
-            <option value="FL">FL</option>
-            <option value="RMU">RMU</option>
-          </select>
-        </div>
-        <div>
-          <label>Koruma Rölesi:</label>
-          <input name="koruma_rolesi" value={formData.koruma_rolesi} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Çalışma Gerilimi:</label>
-          <input type="number" name="calisma_gerilimi" value={formData.calisma_gerilimi} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Nominal Akım:</label>
-          <input type="number" name="nominal_akim" value={formData.nominal_akim} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Kontrol Gerilimi:</label>
-          <input type="number" name="kontrol_gerilimi" value={formData.kontrol_gerilimi} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Akım Trafo:</label>
-          <input name="akim_trafo" value={formData.akim_trafo} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Gerilim Trafo:</label>
-          <input name="gerilim_trafo" value={formData.gerilim_trafo} onChange={handleChange} />
-        </div>
-        <button type="submit">Kaydet</button>
-      </form>
-    </div>
+    <Container maxWidth="sm">
+      <Card sx={{ mt: 4 }}>
+        <CardContent>
+          <Typography variant="h5" gutterBottom>Yeni Sipariş Ekle</Typography>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              fullWidth
+              label="Müşteri Adı"
+              name="customer_name"
+              value={formData.customer_name}
+              onChange={handleChange}
+              margin="normal"
+              required
+            />
+            <TextField
+              select
+              fullWidth
+              label="Ürün Tipi"
+              name="product_type"
+              value={formData.product_type}
+              onChange={handleChange}
+              margin="normal"
+            >
+              {productOptions.map((option) => (
+                <MenuItem key={option} value={option}>{option}</MenuItem>
+              ))}
+            </TextField>
+            <TextField
+              fullWidth
+              label="Koruma Rölesi"
+              name="koruma_rolesi"
+              value={formData.koruma_rolesi}
+              onChange={handleChange}
+              margin="normal"
+            />
+            <TextField
+              type="number"
+              fullWidth
+              label="Çalışma Gerilimi"
+              name="calisma_gerilimi"
+              value={formData.calisma_gerilimi}
+              onChange={handleChange}
+              margin="normal"
+            />
+            <TextField
+              type="number"
+              fullWidth
+              label="Nominal Akım"
+              name="nominal_akim"
+              value={formData.nominal_akim}
+              onChange={handleChange}
+              margin="normal"
+            />
+            <TextField
+              fullWidth
+              label="Akım Trafo"
+              name="akim_trafo"
+              value={formData.akim_trafo}
+              onChange={handleChange}
+              margin="normal"
+            />
+            <TextField
+              fullWidth
+              label="Gerilim Trafo"
+              name="gerilim_trafo"
+              value={formData.gerilim_trafo}
+              onChange={handleChange}
+              margin="normal"
+            />
+            <Box sx={{ mt: 2 }}>
+              <Button type="submit" variant="contained" color="primary" fullWidth>
+                Kaydet
+              </Button>
+            </Box>
+          </form>
+        </CardContent>
+      </Card>
+    </Container>
   );
 }
 
