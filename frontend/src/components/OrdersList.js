@@ -8,7 +8,7 @@ function OrdersList() {
   useEffect(() => {
     api.get("/orders/list")
       .then(res => setOrders(res.data))
-      .catch(err => console.error(err));
+      .catch(err => console.error('API çağrısı başarısız:', err));
   }, []);
 
   return (
