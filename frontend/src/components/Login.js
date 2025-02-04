@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { Container, TextField, Button, Typography, Paper, Box, Alert } from "@mui/material";
+import { Container, TextField, Button, Typography, Paper, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 
 function Login() {
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState({ username: "", password: "" });
-  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -15,24 +13,18 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (credentials.username === "admin" && credentials.password === "admin") {
-      setError("");
       navigate("/dashboard");
     } else {
-      setError("Geçersiz kullanıcı adı veya şifre.");
+      alert("Geçersiz giriş bilgileri.");
     }
   };
 
   return (
     <Container maxWidth="sm">
-      <Paper component={motion.div} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }} sx={{ p: 4, mt: 6, boxShadow: 5, borderRadius: 2 }}>
+      <Paper sx={{ p: 4, mt: 6, boxShadow: 5, borderRadius: 2 }}>
         <Typography variant="h4" align="center" gutterBottom>
-          🔐 Giriş Yap
+          Giriş Yap
         </Typography>
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
         <form onSubmit={handleSubmit}>
           <TextField
             fullWidth
