@@ -3,6 +3,9 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 const container = document.getElementById('root');
 const root = createRoot(container);
