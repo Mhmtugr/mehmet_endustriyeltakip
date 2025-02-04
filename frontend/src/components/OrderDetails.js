@@ -5,10 +5,10 @@ import { Typography, Box, Paper, CircularProgress, Chip, Alert, Container } from
 import { motion } from "framer-motion";
 
 const statusColors = {
-  New: "primary",
-  InProduction: "warning",
-  Completed: "success",
-  Delayed: "error",
+  Beklemede: "warning",
+  Üretimde: "primary",
+  Tamamlandı: "success",
+  Gecikmiş: "error",
 };
 
 function OrderDetails() {
@@ -65,20 +65,16 @@ function OrderDetails() {
           <Typography variant="h4" gutterBottom>
             Sipariş Detayları (ID: {order.id})
           </Typography>
-          <Typography variant="h6">
-            Müşteri Adı: {order.customer_name}
-          </Typography>
-          <Typography variant="h6">
-            Ürün Tipi: {order.product_type}
-          </Typography>
+          <Typography variant="h6">Müşteri Adı: {order.customer_name}</Typography>
+          <Typography variant="h6">Ürün Tipi: {order.product_type}</Typography>
           <Typography variant="h6">
             Durum: <Chip label={order.status} color={statusColors[order.status] || "default"} />
           </Typography>
           <Typography variant="h6">
-            Tahmini Teslim Tarihi: {order.estimated_delivery_days ? `${order.estimated_delivery_days} gün içinde` : "Hesaplanamadı"}
+            Tahmini Teslim Tarihi: {order.delivery_date || "Belirtilmemiş"}
           </Typography>
         </Paper>
-        
+
         <Paper sx={{ p: 3 }}>
           <Typography variant="h5">Ekstra Notlar</Typography>
           <Typography>{order.notes || "Not bulunmamaktadır."}</Typography>
