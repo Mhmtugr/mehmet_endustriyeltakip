@@ -1,62 +1,88 @@
 import React from 'react';
-import { Container, Typography, Grid, Paper, Box, Button } from '@mui/material';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import api from '../services/api';
-import OrdersList from './components/OrdersList';
-import CreateOrder from './components/CreateOrder';
-import Login from './components/Login';
-import Dashboard from './components/Dashboard';
+import { Container, Typography, Grid, Paper, Box } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { BarChart, PieChart, LineChart } from '@mui/x-charts';
+import { motion } from 'framer-motion';
 
-function AIPrediction() {
-  const [result, setResult] = useState(null);
-
-  const handlePredict = async () => {
-    try {
-      const response = await api.post('/ai/predict', {
-        product_type: 'RMU',
-        complexity_factor: 1.1,
-        total_material_count: 20
-      });
-      setResult(response.data.predicted_days);
-    } catch (error) {
-      console.error('AI tahmin hatası:', error);
-      setResult('Error');
-    }
-  };
-
+function Dashboard() {
   return (
-    <div>
-      <Button variant="contained" onClick={handlePredict}>
-        AI Tahmini Al
-      </Button>
-      {result !== null && (
-        <Typography variant="h6">
-          Tahmini Teslim Gün: {result}
-        </Typography>
-      )}
-    </div>
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Typography variant="h3" gutterBottom component={motion.div} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
+        Mehmet Endustriyeltakip Dashboard
+      </Typography>
+      
+      <Grid container spacing={3}>
+        {/* Sipariş Yönetimi Kartı */}
+        <Grid item xs={12} md={6} lg={3}>
+          <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 140, alignItems: 'center', justifyContent: 'center', background: '#e3f2fd' }}>
+            <Typography variant="h6">Siparişler</Typography>
+            <Typography>
+              <Link to="/orders">📦 Siparişleri Görüntüle</Link>
+            </Typography>
+          </Paper>
+        </Grid>
+
+        {/* Üretim Kartı */}
+        <Grid item xs={12} md={6} lg={3}>
+          <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 140, alignItems: 'center', justifyContent: 'center', background: '#fce4ec' }}>
+            <Typography variant="h6">Üretim</Typography>
+            <Typography>
+              <Link to="/production">🏭 Üretim Planlaması</Link>
+            </Typography>
+          </Paper>
+        </Grid>
+
+        {/* Envanter Kartı */}
+        <Grid item xs={12} md={6} lg={3}>
+          <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 140, alignItems: 'center', justifyContent: 'center', background: '#e8f5e9' }}>
+            <Typography variant="h6">Envanter</Typography>
+            <Typography>
+              <Link to="/inventory">📋 Envanter Raporları</Link>
+            </Typography>
+          </Paper>
+        </Grid>
+
+        {/* Raporlar Kartı */}
+        <Grid item xs={12} md={6} lg={3}>
+          <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 140, alignItems: 'center', justifyContent: 'center', background: '#fff3e0' }}>
+            <Typography variant="h6">Raporlar</Typography>
+            <Typography>
+              <Link to="/reports/dashboard">📊 Üretim Raporları</Link>
+            </Typography>
+          </Paper>
+        </Grid>
+      </Grid>
+
+      {/* Grafikler */}
+      <Box sx={{ mt: 4 }}>
+        <Typography variant="h5">📊 Satış ve Üretim Verileri</Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <Paper sx={{ p: 2 }}>
+              <BarChart
+                series={[{ data: [10, 20, 15, 30, 25, 40, 50] }]}
+                xAxis={[{ scaleType: 'band', data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'] }]}
+                width={500}
+                height={300}
+              />
+            </Paper>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Paper sx={{ p: 2 }}>
+              <PieChart
+                series={[
+                  { data: [{ id: 0, value: 40, label: 'Tamamlanan' }, { id: 1, value: 30, label: 'Devam Eden' }, { id: 2, value: 30, label: 'Geciken' }] },
+                ]}
+                width={400}
+                height={300}
+              />
+            </Paper>
+          </Grid>
+        </Grid>
+      </Box>
+    </Container>
   );
 }
 
-function App() {
-  return (
-    <Router>
-      <nav style={{ padding: '1rem', background: '#1976d2', color: '#fff' }}>
-        <Link to="/" style={{ color: '#fff', marginRight: '1rem' }}>Giriş</Link>
-        <Link to="/dashboard" style={{ color: '#fff', marginRight: '1rem' }}>Dashboard</Link>
-        <Link to="/orders" style={{ color: '#fff' }}>Siparişler</Link>
-      </nav>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/orders" element={<OrdersList />} />
-        <Route path="/new-order" element={<CreateOrder />} />
-        <Route path="/welcome" element={<h1>Hoş Geldin!</h1>} />
-        <Route path="/ai-prediction" element={<AIPrediction />} />
-        {/* Diğer modüller için ek rotalar */}
-      </Routes>
-    </Router>
-  );
-}
-
-export default App;
+export default Dashboard;
