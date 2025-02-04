@@ -6,6 +6,7 @@ import OrdersList from "./components/OrdersList";
 import CreateOrder from "./components/CreateOrder";
 import ProductionList from "./components/ProductionList";
 import CreateProduction from "./components/CreateProduction";
+import OrderDetails from "./components/OrderDetails"; // Yeni eklenen import
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/orders" element={<OrdersList />} />
         <Route path="/new-order" element={<CreateOrder />} />
+        <Route path="/order/:id" element={<OrderDetails />} /> {/* Yeni eklenen rota */}
         <Route path="/production" element={<ProductionList />} />
         <Route path="/new-production" element={<CreateProduction />} />
       </Routes>
