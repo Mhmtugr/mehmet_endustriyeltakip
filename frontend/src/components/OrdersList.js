@@ -10,12 +10,12 @@ const statusColors = {
   Completed: "success",
 };
 
-function ordersList() {
-  const [orders, setorders] = useState([]);
+function OrdersList() {
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     api.get("/orders/list")
-      .then(res => setorders(res.data))
+      .then(res => setOrders(res.data))
       .catch(err => console.error(err));
   }, []);
 
@@ -61,4 +61,4 @@ function ordersList() {
   );
 }
 
-export default ordersList;
+export default OrdersList;
