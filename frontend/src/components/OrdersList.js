@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
-import { DataGrid } from "@mui/x-data-grid";
 import {
   Typography,
   Box,
@@ -9,6 +8,13 @@ import {
   Chip,
   Tooltip,
   IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import DoneIcon from "@mui/icons-material/CheckCircle";
@@ -31,6 +37,7 @@ const statusIcons = {
 
 function OrdersList() {
   const [orders, setOrders] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     api
@@ -39,40 +46,8 @@ function OrdersList() {
       .catch((err) => console.error(err));
   }, []);
 
-  const columns = [
-    { field: "id", headerName: "ID", width: 80 },
-    { field: "customer_name", headerName: "Müşteri Adı", width: 180 },
-    { field: "product_type", headerName: "Ürün Tipi", width: 150 },
-    { field: "quantity", headerName: "Miktar", width: 100 },
-    {
-      field: "status",
-      headerName: "Durum",
-      width: 150,
-      renderCell: (params) => (
-        <Tooltip title={params.value}>
-          <Chip
-            label={params.value}
-            color={statusColors[params.value] || "default"}
-            icon={statusIcons[params.value]}
-          />
-        </Tooltip>
-      ),
-    },
-    { field: "delivery_date", headerName: "Tahmini Teslim", width: 150 },
-    {
-      field: "actions",
-      headerName: "Detay",
-      width: 100,
-      renderCell: (params) => (
-        <IconButton component={Link} to={`/order/${params.row.id}`}>
-          <InfoIcon />
-        </IconButton>
-      ),
-    },
-  ];
-
   return (
-    <Box sx={{ height: 600, width: "100%", p: 3 }}>
+    <Box sx={{ width: "100%", p: 3 }}>
       <Typography variant="h4" gutterBottom>
         Sipariş Listesi
       </Typography>
@@ -85,14 +60,46 @@ function OrdersList() {
       >
         Yeni Sipariş Ekle
       </Button>
-      <DataGrid
-        rows={orders}
-        columns={columns}
-        pageSize={10}
-        rowsPerPageOptions={[5, 10, 20]}
-        disableSelectionOnClick
-        autoHeight
-      />
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>Müşteri Adı</TableCell>
+              <TableCell>Ürün Tipi</TableCell>
+              <TableCell>Miktar</TableCell>
+              <TableCell>Durum</TableCell>
+              <TableCell>Tahmini Teslim</TableCell>
+              <TableCell>Detay</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {orders.map((order) => (
+              <TableRow key={order.id}>
+                <TableCell>{order.id}</TableCell>
+                <TableCell>{order.customer_name}</TableCell>
+                <TableCell>{order.product_type}</TableCell>
+                <TableCell>{order.quantity}</TableCell>
+                <TableCell>
+                  <Tooltip title={order.status}>
+                    <Chip
+                      label={order.status}
+                      color={statusColors[order.status] || "default"}
+                      icon={statusIcons[order.status]}
+                    />
+                  </Tooltip>
+                </TableCell>
+                <TableCell>{order.delivery_date || "Belirtilmemiş"}</TableCell>
+                <TableCell>
+                  <IconButton onClick={() => navigate(`/order/${order.id}`)}>
+                    <InfoIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Box>
   );
 }
